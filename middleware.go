@@ -1,7 +1,6 @@
 package negronilogrus
 
 import (
-	"fmt"
 	"net/http"
 	"net/url"
 	"time"
@@ -164,6 +163,5 @@ func DefaultAfter(entry *logrus.Entry, res negroni.ResponseWriter, latency time.
 		"status":      res.Status(),
 		"text_status": http.StatusText(res.Status()),
 		"took":        latency,
-		fmt.Sprintf("measure#%s.latency", name): latency.Nanoseconds(),
 	})
 }

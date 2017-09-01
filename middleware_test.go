@@ -116,14 +116,15 @@ func TestMiddleware_ServeHTTP(t *testing.T) {
 		w.WriteHeader(418)
 	})
 	lines := strings.Split(strings.TrimSpace(mw.Logger.Out.(*bytes.Buffer).String()), "\n")
+
 	assert.Len(t, lines, 2)
 	assert.JSONEq(t,
-		fmt.Sprintf(`{"level":"info","method":"GET","msg":"started handling request",`+
+		fmt.Sprintf(`{"level":"debug","method":"GET","msg":"started handling request",`+
 			`"remote":"10.10.10.10","request":"http://example.com/stuff?rly=ya",`+
 			`"request_id":"22035D08-98EF-413C-BBA0-C4E66A11B28D","time":"%s"}`, nowToday),
 		lines[0])
 	assert.JSONEq(t,
-		fmt.Sprintf(`{"level":"info","method":"GET","msg":"completed handling request",`+
+		fmt.Sprintf(`{"level":"debug","method":"GET","msg":"completed handling request",`+
 			`"remote":"10.10.10.10","request":"http://example.com/stuff?rly=ya",`+
 			`"took":10000,"text_status":"I'm a teapot",`+
 			`"status":418,"request_id":"22035D08-98EF-413C-BBA0-C4E66A11B28D","time":"%s"}`, nowToday),
@@ -140,12 +141,12 @@ func TestMiddleware_ServeHTTP_nilHooks(t *testing.T) {
 	lines := strings.Split(strings.TrimSpace(mw.Logger.Out.(*bytes.Buffer).String()), "\n")
 	assert.Len(t, lines, 2)
 	assert.JSONEq(t,
-		fmt.Sprintf(`{"level":"info","method":"GET","msg":"started handling request",`+
+		fmt.Sprintf(`{"level":"debug","method":"GET","msg":"started handling request",`+
 			`"remote":"10.10.10.10","request":"http://example.com/stuff?rly=ya",`+
 			`"request_id":"22035D08-98EF-413C-BBA0-C4E66A11B28D","time":"%s"}`, nowToday),
 		lines[0])
 	assert.JSONEq(t,
-		fmt.Sprintf(`{"level":"info","method":"GET","msg":"completed handling request",`+
+		fmt.Sprintf(`{"level":"debug","method":"GET","msg":"completed handling request",`+
 			`"remote":"10.10.10.10","request":"http://example.com/stuff?rly=ya",`+
 			`"took":10000,"text_status":"I'm a teapot",`+
 			`"status":418,"request_id":"22035D08-98EF-413C-BBA0-C4E66A11B28D","time":"%s"}`, nowToday),
@@ -163,7 +164,7 @@ func TestMiddleware_ServeHTTP_BeforeOverride(t *testing.T) {
 	lines := strings.Split(strings.TrimSpace(mw.Logger.Out.(*bytes.Buffer).String()), "\n")
 	assert.Len(t, lines, 2)
 	assert.JSONEq(t,
-		fmt.Sprintf(`{"wat":200,"level":"info","msg":"completed handling request",`+
+		fmt.Sprintf(`{"wat":200,"level":"debug","msg":"completed handling request",`+
 			`"took":10000,"text_status":"I'm a teapot",`+
 			`"status":418,"request_id":"22035D08-98EF-413C-BBA0-C4E66A11B28D","time":"%s"}`, nowToday),
 		lines[1])
@@ -180,7 +181,7 @@ func TestMiddleware_ServeHTTP_AfterOverride(t *testing.T) {
 	lines := strings.Split(strings.TrimSpace(mw.Logger.Out.(*bytes.Buffer).String()), "\n")
 	assert.Len(t, lines, 2)
 	assert.JSONEq(t,
-		fmt.Sprintf(`{"hambone":57,"level":"info","method":"GET","msg":"completed handling request",`+
+		fmt.Sprintf(`{"hambone":57,"level":"debug","method":"GET","msg":"completed handling request",`+
 			`"remote":"10.10.10.10","request":"http://example.com/stuff?rly=ya",`+
 			`"request_id":"22035D08-98EF-413C-BBA0-C4E66A11B28D","time":"%s"}`, nowToday),
 		lines[1])
@@ -195,7 +196,7 @@ func TestMiddleware_ServeHTTP_logStartingFalse(t *testing.T) {
 	lines := strings.Split(strings.TrimSpace(mw.Logger.Out.(*bytes.Buffer).String()), "\n")
 	assert.Len(t, lines, 1)
 	assert.JSONEq(t,
-		fmt.Sprintf(`{"level":"info","method":"GET","msg":"completed handling request",`+
+		fmt.Sprintf(`{"level":"debug","method":"GET","msg":"completed handling request",`+
 			`"remote":"10.10.10.10","request":"http://example.com/stuff?rly=ya",`+
 			`"took":10000,"text_status":"I'm a teapot",`+
 			`"status":418,"request_id":"22035D08-98EF-413C-BBA0-C4E66A11B28D","time":"%s"}`, nowToday),

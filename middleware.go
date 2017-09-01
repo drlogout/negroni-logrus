@@ -43,7 +43,7 @@ type Middleware struct {
 
 // NewMiddleware returns a new *Middleware, yay!
 func NewMiddleware() *Middleware {
-	return NewCustomMiddleware(logrus.InfoLevel, &logrus.TextFormatter{}, "web")
+	return NewCustomMiddleware(logrus.DebugLevel, &logrus.TextFormatter{}, "web")
 }
 
 // NewCustomMiddleware builds a *Middleware with the given level and formatter
@@ -129,7 +129,7 @@ func (m *Middleware) ServeHTTP(rw http.ResponseWriter, r *http.Request, next htt
 	entry = m.Before(entry, r, remoteAddr)
 
 	if m.logStarting {
-		entry.Info("started handling request")
+		entry.Debug("started handling request")
 	}
 
 	next(rw, r)
@@ -137,7 +137,7 @@ func (m *Middleware) ServeHTTP(rw http.ResponseWriter, r *http.Request, next htt
 	latency := m.clock.Since(start)
 	res := rw.(negroni.ResponseWriter)
 
-	m.After(entry, res, latency, m.Name).Info("completed handling request")
+	m.After(entry, res, latency, m.Name).Debug("completed handling request")
 }
 
 // BeforeFunc is the func type used to modify or replace the *logrus.Entry prior
